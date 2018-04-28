@@ -1,0 +1,97 @@
+www.obscurity.xyz {
+    redir https://obscurity.xyz{uri}
+}
+
+obscurity.xyz {
+
+log /usr/local/www/log/obscurity.log
+root /usr/local/www/dokuwiki
+gzip
+
+fastcgi / /var/run/php-fpm/socket php {
+  index doku.php
+}
+
+internal /forbidden
+
+rewrite {
+  r /(data/|conf/|bin/|inc/|install.php)
+  to /forbidden
+}
+rewrite /_media {
+  to /lib/exe/fetch.php?media={path}&{query}
+}
+rewrite /_detail {
+  to /lib/exe/detail.php?media={path}&{query}
+}
+rewrite /_export {
+  r /([^/]+)/(.*)
+  to /doku.php?do=export_{1}&id={2}
+}
+rewrite {
+  if {path} not_match /lib/.*
+  if {path} not_match /forbidden
+  r /(.*)
+  to {uri} /doku.php?id={1}&{query}
+}
+}
+
+www.ramins.net {
+    redir https://ramins.net{uri}
+}
+
+ramins.net {
+
+    log /usr/local/www/log/ramins.log
+    root /usr/local/www/ramins.net 
+}
+
+www.sbramin.com {
+    redir https://sbramin.com{uri}
+} 
+
+sbramin.com {
+    log /usr/local/www/log/sbramin.log
+    root /usr/local/www/sbramin.com
+}
+
+www.arightpigsear.com {
+    redir https://arightpigsear.com{uri}
+}
+
+arightpigsear.com {
+    log /usr/local/www/log/arigtpigsear.log
+    root /usr/local/www/arightpigsear.com
+}
+
+www.sheprovides.com {
+    redir https://sheprovides.com{uri}
+}
+
+sheprovides.com {
+    log /usr/local/www/log/sheprovides.log
+    root /usr/local/www/sheprovides.com
+}
+
+www.netachef.com {
+    redir https://netachef.com{uri}
+}
+
+netachef.com {
+    log /usr/local/www/log/netachef.log
+    root /usr/local/www/netachef.com
+}
+
+www.netacorp.xyz {
+    redir https://netacorp.xyz{uri}
+}
+
+netacorp.xyz {
+    log /usr/local/www/log/netacorp.log
+    root /usr/local/www/netacorp.xyz
+}
+
+git.obscurity.xyz {
+    log /usr/local/www/log/git.log
+    proxy / 172.17.0.102:3000
+}
