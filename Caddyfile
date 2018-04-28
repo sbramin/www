@@ -7,7 +7,7 @@ sbramin.com {
 	root /srv/sbramin.com
         git {
 	repo github.com/sbramin/www
-	path sbramin.com
+	path /srv
 	}
 }
 
