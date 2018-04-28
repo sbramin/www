@@ -1,55 +1,45 @@
-www.ramins.net {
-    redir https://ramins.net{uri}
-}
-
-ramins.net {
-
-    log /usr/local/www/log/ramins.log
-    root /usr/local/www/ramins.net 
-}
-
-www.sbramin.com {
+*.sbramin.com:80 {
     redir https://sbramin.com{uri}
 } 
 
 sbramin.com {
-    log /usr/local/www/log/sbramin.log
-    root /usr/local/www/sbramin.com
+        tls mail@sbramin.com
+	root /srv/sbramin.com
+        git {
+	repo github.com/sbramin/www
+	path sbramin.com
+	}
 }
 
-www.arightpigsear.com {
+*.ramins.net:80 {
+    redir https://ramins.net{uri}
+}
+ramins.net {
+        tls mail@sbramin.com
+	root /srv/ramins.net
+}
+
+*.arightpigsear.com:80 {
     redir https://arightpigsear.com{uri}
 }
-
 arightpigsear.com {
-    log /usr/local/www/log/arigtpigsear.log
-    root /usr/local/www/arightpigsear.com
+        tls mail@sbramin.com
+	root /srv/arightpigsear.com
+
 }
 
-www.sheprovides.com {
+*.sheprovides.com:80 {
     redir https://sheprovides.com{uri}
 }
-
 sheprovides.com {
-    log /usr/local/www/log/sheprovides.log
-    root /usr/local/www/sheprovides.com
+        tls mail@sbramin.com
+	root /srv/arightpigsear.com
 }
 
-www.netachef.com {
+*.netachef.com:80 {
     redir https://netachef.com{uri}
 }
-
 netachef.com {
-    log /usr/local/www/log/netachef.log
-    root /usr/local/www/netachef.com
+        tls mail@sbramin.com
+	root /srv/netachef.com
 }
-
-www.netacorp.xyz {
-    redir https://netacorp.xyz{uri}
-}
-
-netacorp.xyz {
-    log /usr/local/www/log/netacorp.log
-    root /usr/local/www/netacorp.xyz
-}
-
