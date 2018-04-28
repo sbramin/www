@@ -33,7 +33,7 @@ arightpigsear.com {
 }
 sheprovides.com {
         tls mail@sbramin.com
-	root /srv/arightpigsear.com
+	root /srv/sheprovides.com
 }
 
 *.netachef.com:80 {
