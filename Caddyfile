@@ -1,41 +1,3 @@
-www.obscurity.xyz {
-    redir https://obscurity.xyz{uri}
-}
-
-obscurity.xyz {
-
-log /usr/local/www/log/obscurity.log
-root /usr/local/www/dokuwiki
-gzip
-
-fastcgi / /var/run/php-fpm/socket php {
-  index doku.php
-}
-
-internal /forbidden
-
-rewrite {
-  r /(data/|conf/|bin/|inc/|install.php)
-  to /forbidden
-}
-rewrite /_media {
-  to /lib/exe/fetch.php?media={path}&{query}
-}
-rewrite /_detail {
-  to /lib/exe/detail.php?media={path}&{query}
-}
-rewrite /_export {
-  r /([^/]+)/(.*)
-  to /doku.php?do=export_{1}&id={2}
-}
-rewrite {
-  if {path} not_match /lib/.*
-  if {path} not_match /forbidden
-  r /(.*)
-  to {uri} /doku.php?id={1}&{query}
-}
-}
-
 www.ramins.net {
     redir https://ramins.net{uri}
 }
@@ -91,7 +53,3 @@ netacorp.xyz {
     root /usr/local/www/netacorp.xyz
 }
 
-git.obscurity.xyz {
-    log /usr/local/www/log/git.log
-    proxy / 172.17.0.102:3000
-}
