@@ -5,7 +5,7 @@ xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
 xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url><loc>https://obscurity.xyz/index.html</loc><lastmod>2019-09-08</lastmod><priority>1.0</priority></url>
-<url><loc>https://obscurity.xyz/test.html</loc><lastmod>2019-09-08</lastmod><priority>1.0</priority></url>
 <url><loc>https://obscurity.xyz/inception.html</loc><lastmod>2019-09-08</lastmod><priority>1.0</priority></url>
+<url><loc>https://obscurity.xyz/timl/</loc><lastmod>2019-09-08</lastmod><priority>1.0</priority></url>
 <url><loc>https://obscurity.xyz/about.html</loc><lastmod>2019-09-08</lastmod><priority>1.0</priority></url>
 </urlset>
