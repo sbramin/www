@@ -14,7 +14,7 @@ a collection of devices, both wired and wireless, that are nat'd through my rout
 [wired-clients] --
 ```
 
-## prerequisits
+## prerequisites
 
 ### install
 
@@ -26,7 +26,7 @@ install wireguard-go (the client/server) and wireguard-tools.
 
 ### pf.conf
 
-This is the simplest pf filei _/etc/pf.conf_, my wan interface is **re0**, my switch plugs into lan **re2** and wg will create the vpn interface **tun0**. The two important sections are **max-mss 1360** (more below on this) and the **nat_to** line on the vpn interface.
+This is the simplest pf file _/etc/pf.conf_, my wan interface is **re0**, my switch plugs into lan **re2** and wg will create the vpn interface **tun0**. The two important sections are **max-mss 1360** (more below on this) and the **nat_to** line on the vpn interface.
 
 ```
 lan = "re2"
@@ -58,7 +58,7 @@ pass in on { $lan } inet
 
 ### wg config
 
-if you are connecting to a wg endpoint you run, you will need to generate your public/private keys and use the relevant address/endpoint/dns settings, this is well documented in [jasper's](https://blog.jasper.la/wireguard-on-openbsd.html) article, oterhwise your provider should provide these eg. [azire's](https://www.azirevpn.com/cfg/wireguard) config generator. this file is stored in _/etc/wireguard/vpn.conf_ (can name it anything you like, needs to end in .conf).
+if you are connecting to a wg endpoint you run, you will need to generate your public/private keys and use the relevant address/endpoint/dns settings, this is well documented in [jasper's](https://blog.jasper.la/wireguard-on-openbsd.html) article, otherwise your provider should provide these eg. [azire's](https://www.azirevpn.com/cfg/wireguard) config generator. this file is stored in _/etc/wireguard/vpn.conf_ (can name it anything you like, needs to end in .conf).
 
 ```
 [Interface]
