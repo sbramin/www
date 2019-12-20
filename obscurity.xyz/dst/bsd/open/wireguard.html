@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>obscurity xyz</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="alternate" type="application/atom+xml" href="/rss.xml" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+  </head>
+  <body>
+    <div class="header">
+      <a href="/"><b>obscurity</b></a>
+      <a href="/about.html">about</a>
+    </div>
+    <div class="article">
+<h1 id="openbsd/wireguard">openbsd/wireguard</h1>
+
+<p><a href="https://www.wireguard.com/">wireguard</a> (wg) is a modern vpn protocol, using the latest class of encryption algorithms while at the same time promising speed and a small code base.</p>
+
+<p>modern crypto and lean code are also tenants of openbsd, thus it was a no brainer to migrate my router from openvpn over to wireguard.</p>
+
+<h2 id="my%20setup">my setup</h2>
+
+<p>a collection of devices, both wired and wireless, that are nat&#8217;d through my router out via my vpn provider <a href="https://www.azirevpn.com/wireguard">azire*</a> and out to the internet using the wg-quick for starting wg.</p>
+
+<pre><code>[wifi-ap] --------
+                 |-- [switch] -- [router (wg-client)] -- [isp] -- [endpoint wg-server)] -- {the internet}
+[wired-clients] --
+</code></pre>
+
+<h2 id="prerequisits">prerequisits</h2>
+
+<h3 id="install">install</h3>
+
+<p>install wireguard-go (the client/server) and wireguard-tools.</p>
+
+<pre><code>~ doas pkg_add -v wireguard_tools wireguard-go
+</code></pre>
+
+<h3 id="pf.conf">pf.conf</h3>
+
+<p>This is the simplest pf filei <em>/etc/pf.conf</em>, my wan interface is <strong>re0</strong>, my switch plugs into lan <strong>re2</strong> and wg will create the vpn interface <strong>tun0</strong>. The two important sections are <strong>max-mss 1360</strong> (more below on this) and the <strong>nat_to</strong> line on the vpn interface.</p>
+
+<pre><code>lan = &quot;re2&quot;
+wan = &quot;re0&quot;
+vpn = &quot;tun0&quot;
+
+table &lt;martians&gt; { 0.0.0.0/8 10.0.0.0/8 127.0.0.0/8 169.254.0.0/16 \
+      172.16.0.0/12 192.0.0.0/24 192.0.2.0/24 224.0.0.0/3 \
+      192.168.0.0/16 198.18.0.0/15 198.51.100.0/24 \
+      203.0.113.0/24 }
+
+set block-policy drop
+set loginterface egress
+set skip on { lo0 }
+
+match in all scrub (no-df random-id max-mss 1360)
+match out on $vpn inet from !(egress:network) to any nat-to ($vpn:0)
+
+antispoof quick for { egress $lan $vpn }
+
+block in quick on egress from &lt;martians&gt; to any
+block return out quick on egress from any to &lt;martians&gt;
+block all
+
+pass out quick inet
+
+pass in on { $lan } inet
+</code></pre>
+
+<h3 id="wg%20config">wg config</h3>
+
+<p>if you are connecting to a wg endpoint you run, you will need to generate your public/private keys and use the relevant address/endpoint/dns settings, this is well documented in <a href="https://blog.jasper.la/wireguard-on-openbsd.html">jasper&#8217;s</a> article, oterhwise your provider should provide these eg. <a href="https://www.azirevpn.com/cfg/wireguard">azire&#8217;s</a> config generator. this file is stored in <em>/etc/wireguard/vpn.conf</em> (can name it anything you like, needs to end in .conf).</p>
+
+<pre><code>[Interface]
+PrivateKey = 5L+k............................+QOvXlU=
+DNS = 192.211.0.2
+Address = 10.0.0.42/19
+
+[Peer]
+PublicKey = xuxo8g............................qxTdfQ=
+Endpoint = 149.248.160.60:51820
+AllowedIPs = 0.0.0.0/0
+
+</code></pre>
+
+<h3 id="network%20settings">network settings</h3>
+
+<p>this was the missing piece to get wg fully working, by default my outbound interface had an mtu of <em>1500</em> and <em>wg-quick</em> creates a tun device with an mtu of 80 bytes fewer, <em>1420</em>. i wasn&#8217;t able to find particular documentation as to why this is 80 bytes, instead of the usual 40/60 bytes a tcp header takes. at this point the router was able to use the wg connection perfectly, but the nat&#8217;d clients had issues connecting to particular sites. it was also necessary to set the <em>max</em>mss_ another 80 bytes lower than the tun0 mtu and <em>net.inet.tcp.mssdflt</em> to the same.</p>
+
+<pre><code>~ doas sysctl net.inet.tcp.mssdflt=1360
+# echo &#39;net.inet.tcp.mssdflt=1360&#39; &gt;&gt; /etc/sysctl.conf
+</code></pre>
+
+<h2 id="running">running</h2>
+
+<p>doubtless this could be improved on, but currently i start wg manually when my router boots. this, and the nat&#39;ing on the vpn interface mean its impossible for clients to connect to the internet without the vpn being up. as my router is on a ups and only reboots when a kernel patch requires it, it&#8217;s a compromise i can live with. run wg-quick (please replace <strong>vpn</strong> with whatever you named your wg <em>.conf</em> file.) and reload pf rules.</p>
+
+<pre><code>~ doas wg-quick up vpn
+~ doas pfctl -f /etc/pf.conf
+</code></pre>
+
+<p><code>*</code> i am not affiliated with azire in anyway, just a happy customer, and they are supporters of the technology. doubtless other providers will also offer wg if they don&#8217;t already, or you can run your own as described in jasper&#8217;s article.</p>
+    
+    </div>
+    <div class="footer">
+    <hr />
+    obscure by default
+    </div>
+  </body>
+</html>

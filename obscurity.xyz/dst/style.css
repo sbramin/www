@@ -1,0 +1,44 @@
+body {
+  font-family: "Bitstream Vera Sans Mono", monospace;
+  font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 18.5714px;
+}
+a {
+  cursor: pointer;
+}
+h1 {
+  margin-top: 30px;
+}
+h2 {
+  margin-bottom: 0px;
+}
+hr {
+  border: 1;
+  margin-top: 10px;
+}
+li {
+  padding: 5px 0;
+}
+p img,
+table {
+  margin-top: 100px;	
+  width: 100%;
+  border: 2px solid black;
+}
+pre,
+p {
+  line-height: 140%;
+}
+pre {
+  padding: 10px 10px 10px 15px;
+  overflow-x: auto;
+  color: white;
+  background: #0A0A0A;
+  margin-bottom: 40px;
+}
+.header,
+.footer,
+.article {
+  margin: 0 auto;
+  max-width: 1000px;
+  padding: 10px;
+}
